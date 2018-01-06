@@ -1,0 +1,22 @@
+{
+  "generator-ngx-rocket": {
+    "version": "3.1.1",
+    "props": {
+      "appName": "iTrack",
+      "target": [
+        "web",
+        "cordova"
+      ],
+      "pwa": true,
+      "mobile": [
+        "ios",
+        "android"
+      ],
+      "ui": "material",
+      "layout": "simple",
+      "auth": true,
+      "projectName": "i-track",
+      "packageManager": "npm"
+    }
+  }
+}

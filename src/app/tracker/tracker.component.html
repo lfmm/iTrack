@@ -1,0 +1,32 @@
+<div class="container">
+  <mat-card>
+    <h1>
+      <mat-card-title translate>APP_NAME</mat-card-title>
+    </h1>
+    <mat-card-content>
+      <mat-icon>code</mat-icon>
+      <span translate>Version</span> {{version}}
+      <div *ngFor="let t of trackItems | async">
+
+        <h3>Track Item ID: {{ t.id }} </h3>
+        <p>Track Item Title and Body: {{ t.title + ' - ' + t.body }}</p>
+        <p>Track Item When and Who: {{ t.when.toString() + ' - ' + t.who }}</p>
+      
+        
+        <button *ngIf="t.who==='mistery man'" class="button is-warning" 
+                (click)="updateTrackItem(t.id, t, 'mistery woman')">
+          Upgrade to Something new
+        </button>
+      
+        <button *ngIf="t.who==='mistery woman'" class="button is-warning" 
+                (click)="updateTrackItem(t.id, t, 'mistery man')">
+          Upgrade to Something new
+        </button>
+      
+        <button class="button is-danger" (click)="deleteTrackItem(t.id)">DELETE</button>
+         <hr>
+      </div>
+      <button class="button is-primary" (click)="createTrackItem()">CREATE new Track Item</button>
+    </mat-card-content>
+  </mat-card>
+</div>
