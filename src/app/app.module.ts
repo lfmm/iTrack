@@ -17,6 +17,7 @@ import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
 import { AboutModule } from './about/about.module';
 import { TrackerModule } from './tracker/tracker.module';
+import { MoneyModule } from './money/money.module';
 import { LoginModule } from './login/login.module';
 
 // state
@@ -49,6 +50,7 @@ import { StoreDevtools } from '@ngrx/store-devtools/src/devtools';
     HomeModule,
     AboutModule,
     TrackerModule,
+    MoneyModule,
     LoginModule,
     AppRoutingModule
   ],

@@ -10,6 +10,7 @@ import { NgModule } from '@angular/core';
 import { CdkTableModule } from '@angular/cdk/table';
 import { OverlayModule } from '@angular/cdk/overlay';
 import {
+  MatTableModule,
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -43,6 +44,7 @@ import {
   exports: [
     // CDK
     CdkTableModule,
+    MatTableModule,
     OverlayModule,
 
     // Material
