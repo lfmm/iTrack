@@ -26,7 +26,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { OptimizedRouterStateSerializer } from './core/state/router/router.state';
 import { RouterEffects } from './core/state/router/router.effects';
-import { reducers } from './core/state';
+import { UndoredoEffects } from './core/state/undoredo/undoredo';
+import { UndoredoService} from './core/state/undoredo/undoredo.service';
+import { reducers, metaReducers } from './core/state';
 import { StoreDevtools } from '@ngrx/store-devtools/src/devtools';
 
 
@@ -38,10 +40,10 @@ import { StoreDevtools } from '@ngrx/store-devtools/src/devtools';
     TranslateModule.forRoot(),
     BrowserAnimationsModule,
     MaterialModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([RouterEffects]),
+    EffectsModule.forRoot([RouterEffects, UndoredoEffects]),
     CoreModule,
     SharedModule,
     HomeModule,
@@ -55,7 +57,8 @@ import { StoreDevtools } from '@ngrx/store-devtools/src/devtools';
     Keyboard,
     StatusBar,
     SplashScreen,
-    { provide: RouterStateSerializer, useClass: OptimizedRouterStateSerializer }
+    { provide: RouterStateSerializer, useClass: OptimizedRouterStateSerializer },
+    UndoredoService
   ],
   bootstrap: [AppComponent]
 })

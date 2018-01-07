@@ -15,6 +15,10 @@ import { I18nService } from './i18n.service';
 import { HttpService } from './http/http.service';
 import { HttpCacheService } from './http/http-cache.service';
 
+// state management
+import { StoreModule } from '@ngrx/store';
+import { themeReducer } from './state/theme/theme.state';
+
 export function createHttpService(backend: ConnectionBackend,
                                   defaultOptions: RequestOptions,
                                   httpCacheService: HttpCacheService) {
@@ -28,7 +32,8 @@ export function createHttpService(backend: ConnectionBackend,
     TranslateModule,
     FlexLayoutModule,
     MaterialModule,
-    RouterModule
+    RouterModule,
+    StoreModule.forFeature('theme', themeReducer)
   ],
   declarations: [
     HeaderComponent,

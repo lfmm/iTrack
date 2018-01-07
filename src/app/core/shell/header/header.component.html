@@ -6,7 +6,7 @@
     <span class="title">{{title}}</span>
   </div>
   <div fxHide.lt-md>
-    <a class="brand" href="https://github.com/ngx-rocket" translate>APP_NAME</a>
+    <a class="brand" href="/" translate>APP_NAME</a>
     <button mat-button routerLink="/home" routerLinkActive="active">
       <i class="fa fa-home"></i>
       <span translate>Home</span>
@@ -21,6 +21,14 @@
     </button>
   </div>
   <span fxFlex></span>
+  <span class="vertical-line"></span>
+  <button mat-icon-button (click)="back()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <button mat-icon-button (click)="forward()">
+    <mat-icon>arrow_forward</mat-icon>
+  </button>
+  <span class="vertical-line"></span>
   <button mat-icon-button [matMenuTriggerFor]="languageMenu">
     <mat-icon>language</mat-icon>
   </button>
@@ -29,6 +37,7 @@
         {{language}}
       </button>
   </mat-menu>
+  <span class="vertical-line"></span>
   <button mat-icon-button [matMenuTriggerFor]="userMenu">
     <mat-icon>person</mat-icon>
   </button>
@@ -37,8 +46,21 @@
       <mat-list-item>
         <span translate>Logged in as</span>&nbsp;<b>{{username}}</b>
       </mat-list-item>
-      <mat-divider></mat-divider>
     </mat-list>
+    <mat-divider></mat-divider>
+    <button mat-menu-item [matMenuTriggerFor]="themeMenu">
+      <mat-icon>format_color_fill</mat-icon> Theme
+    </button>
+    <mat-menu #themeMenu="matMenu">
+      <button mat-menu-item (click)="setTheme('app-light-theme')">
+        Light Theme
+      </button>
+      <button mat-menu-item (click)="setTheme('app-dark-theme')">
+        Dark Theme
+      </button>
+    </mat-menu>
+    <mat-divider></mat-divider>
     <button mat-menu-item (click)="logout()" translate>Logout</button>
   </mat-menu>
+  <span class="vertical-line"></span>
 </mat-toolbar>

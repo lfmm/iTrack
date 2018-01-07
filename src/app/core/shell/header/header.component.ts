@@ -6,6 +6,11 @@ import { MatSidenav } from '@angular/material';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { I18nService } from '../../i18n.service';
 
+import { Store } from '@ngrx/store';
+import * as fromTheme from '../../state/theme/theme.state';
+import * as fromRouterState from '../../state/router/router.state';
+import * as fromRouterActions from '../../state/router/router.actions';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -18,9 +23,23 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router,
               private titleService: Title,
               private authenticationService: AuthenticationService,
-              private i18nService: I18nService) { }
+              private i18nService: I18nService,
+              private themeStore: Store<fromTheme.State>,
+              private routerStore: Store<fromRouterState.RouterStateUrl>) { }
 
   ngOnInit() { }
+
+  back() {
+    this.routerStore.dispatch(new fromRouterActions.Back());
+  }
+
+  forward() {
+    this.routerStore.dispatch(new fromRouterActions.Forward());
+  }
+
+  setTheme(theme: string) {
+    this.themeStore.dispatch(new fromTheme.Change('1', { id: '1', class: theme }));
+  }
 
   setLanguage(language: string) {
     this.i18nService.language = language;
