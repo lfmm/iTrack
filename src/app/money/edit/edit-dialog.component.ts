@@ -18,22 +18,21 @@ export class EditDialogComponent implements OnInit {
   form: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: fromMoneyModels.MoneyItem,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder) {
     // ++ build form
     this.form = this.fb.group({
       title: ['', Validators.required],
-      direction: [0, Validators.required],
+      direction: ['', Validators.required],
       amount: [0, Validators.required],
       when: [new Date(), Validators.required],
       where: null,
       who: ['', Validators.required]
     });
-    // --
+    // ++
   }
 
   ngOnInit() {
-    console.log('Dialog open with data:', this.data);
     if (this.data && this.data.id) {
       this.type = 'Update Item (' + this.data.id + ')';
     } else {

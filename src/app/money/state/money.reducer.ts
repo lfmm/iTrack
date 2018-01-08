@@ -1,7 +1,7 @@
 import * as actions from './money.actions';
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
-import { createFeatureSelector } from '@ngrx/store';
-import { MoneyItem, defaultMoneyItem } from './money.models';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { MoneyItem, MoneyDirection, defaultMoneyItem, buildMoneyStat } from './money.models';
 
 // Entity adapter
 export const moneyAdapter = createEntityAdapter<MoneyItem>();
@@ -32,6 +32,7 @@ export function moneyReducer(
 
 // Create the default selectors
 export const getMoneyState = createFeatureSelector<State>('money');
+export const getMoneyStateMoneyList = createSelector(getMoneyState, (n: any) => n.entities);
 
 export const {
     selectIds,
@@ -39,4 +40,32 @@ export const {
     selectAll,
     selectTotal,
   } = moneyAdapter.getSelectors(getMoneyState);
+
+export const selectInEntities = createSelector(getMoneyStateMoneyList, (n: any) => {
+  const l: MoneyItem[] = Object.values(n);
+  if (l && l.length > 0) {
+    return l.filter((i: MoneyItem) => {
+      return i.direction === MoneyDirection.In;
+    });
+  }
+  return [];
+});
+
+export const selectInEntitiesStat = createSelector(selectInEntities, (n: any) => {
+  return buildMoneyStat(MoneyDirection.In, n);
+});
+
+export const selectOutEntities = createSelector(getMoneyStateMoneyList, (n: any) => {
+  const l: MoneyItem[] = Object.values(n);
+  if (l && l.length > 0) {
+    return l.filter((i: MoneyItem) => {
+      return i.direction === MoneyDirection.Out;
+    });
+  }
+  return [];
+});
+
+export const selectOutEntitiesStat = createSelector(selectOutEntities, (n: any) => {
+  return buildMoneyStat(MoneyDirection.Out, n);
+});
 

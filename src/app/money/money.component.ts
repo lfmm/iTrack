@@ -14,8 +14,8 @@ import * as actions from './state/money.actions';
 import * as fromMoney from './state/money.reducer';
 import * as fromMoneyModels from './state/money.models';
 
-
 import { environment } from '../../environments/environment';
+import { MoneyStat } from './state/money.models';
 
 @Component({
   selector: 'app-money',
@@ -33,6 +33,12 @@ export class MoneyComponent implements OnInit, OnDestroy {
     = new SelectionModel<fromMoneyModels.MoneyItem>(true, []);
   moneyListColumns: string[] = ['select', 'id', 'title', 'direction', 'amount', 'when', 'where', 'who'];
 
+  moneyInStatSubscription: Subscription;
+  moneyInStat: fromMoneyModels.MoneyStat;
+
+  moneyOutStatSubscription: Subscription;
+  moneyOutStat: fromMoneyModels.MoneyStat;
+
   @ViewChild(MatSort) moneySort: MatSort;
   @ViewChild(MatPaginator) moneyPaginator: MatPaginator;
 
@@ -45,10 +51,20 @@ export class MoneyComponent implements OnInit, OnDestroy {
       this.moneyItemsDS.sort = this.moneySort;
       this.moneyItemsDS.paginator = this.moneyPaginator;
     });
+    this.moneyInStatSubscription = this.store.select(fromMoney.selectInEntitiesStat).subscribe((i: MoneyStat) => {
+      this.moneyInStat = i;
+      console.log(this.moneyInStat);
+    });
+    this.moneyOutStatSubscription = this.store.select(fromMoney.selectOutEntitiesStat).subscribe((i: MoneyStat) => {
+      this.moneyOutStat = i;
+      console.log(this.moneyOutStat);
+    });
   }
 
   ngOnDestroy() {
     if (this.moneyItemsSubscription) { this.moneyItemsSubscription.unsubscribe(); }
+    if (this.moneyInStatSubscription) { this.moneyInStatSubscription.unsubscribe(); }
+    if (this.moneyOutStatSubscription) { this.moneyOutStatSubscription.unsubscribe(); }
   }
 
   createMoneyItem() {
@@ -71,17 +87,20 @@ export class MoneyComponent implements OnInit, OnDestroy {
   editMoneyItem(moneyItem: fromMoneyModels.MoneyItem) {
     const dialogRef: MatDialogRef<EditDialogComponent> = this.dialog.open(EditDialogComponent, {
       width: '350px',
-      data: moneyItem
+      data: Object.assign({}, moneyItem, { direction: moneyItem.direction.toString() })
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed with the following result', result);
       if (result) {
+        if (!Number.isInteger(result.direction)) {
+          result.direction = Number.parseInt(result.direction);
+        }
         if (!result.id) {
           result.id = Guid.newGuid();
           this.store.dispatch( new actions.Create(result) );
         } else {
-          this.store.dispatch( new actions.Update(result.id, Object.assign({}, result.moneyItem )) );
+          this.store.dispatch( new actions.Update(result.id, result) );
         }
       }
     });

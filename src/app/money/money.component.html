@@ -1,8 +1,20 @@
 <div class="container">
   <mat-card>
-    <h1>
-      <mat-card-title translate>Your money</mat-card-title>
-    </h1>
+    <mat-card-title translate>Your money</mat-card-title>
+    <mat-card-subtitle>
+      <div fxFlex>
+        <h3>In</h3>
+        <ng-container *ngIf="moneyInStat">
+          {{ moneyInStat.itemCount }} / {{ moneyInStat.totalAmount }}
+        </ng-container>
+      </div>
+      <div fxFlex>
+        <h3>Out</h3>
+        <ng-container *ngIf="moneyOutStat">
+          {{ moneyOutStat.itemCount }} / {{ moneyOutStat.totalAmount }}
+        </ng-container>
+      </div>
+    </mat-card-subtitle>
     <mat-card-content>
       <div class="money-list-container mat-elevation-z8">
         <div class="filter-container">
@@ -49,7 +61,8 @@
           <ng-container matColumnDef="direction">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Direction </mat-header-cell>
             <mat-cell *matCellDef="let e">
-              {{ e.direction }}
+              <mat-icon *ngIf="e.direction === 0" style="color: green;">arrow_upward</mat-icon>
+              <mat-icon *ngIf="e.direction === 1" style="color: red;">arrow_downward</mat-icon>
             </mat-cell>
           </ng-container>
           <!-- id column -->
