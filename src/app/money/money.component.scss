@@ -17,3 +17,15 @@
   min-height: 64px;
   padding: 8px 24px 0;
 }
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-row:hover {
+  background-color: #999999;
+}
+
+.mat-column-select {
+  overflow: visible;
+}

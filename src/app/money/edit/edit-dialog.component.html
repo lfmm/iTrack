@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>{{ type }}</h1>
+<div mat-dialog-content>
+<form [formGroup]="form" class="">
+  <mat-form-field>
+    <input matInput class="form-control" formControlName="title" [placeholder]="'Title' | translate" type="text" [(ngModel)]="data.title" required>
+    <mat-error *ngIf="form.get('title').invalid">{{ getErrorMessage('title') }}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select class="form-control" formControlName="direction" [(ngModel)]="data.direction" [placeholder]="'Direction' | translate">
+      <mat-option>None</mat-option>
+      <mat-option value="0">In</mat-option>
+      <mat-option value="1">Out</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('direction').invalid">{{ getErrorMessage('direction') }}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="form-control" formControlName="amount" [placeholder]="'Amount' | translate" type="number" [(ngModel)]="data.amount" required>
+    <span matPrefix>€&nbsp;</span>
+    <mat-error *ngIf="form.get('amount').invalid">{{ getErrorMessage('amount') }}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="form-control" formControlName="when" [matDatepicker]="picker1" [placeholder]="'When' | translate" [(ngModel)]="data.when">
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+    <mat-error *ngIf="form.get('when').invalid">{{ getErrorMessage('when') }}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="form-control" formControlName="who" [placeholder]="'Who' | translate" type="text" [(ngModel)]="data.who" required>
+    <mat-error *ngIf="form.get('who').invalid">{{ getErrorMessage('who') }}</mat-error>
+  </mat-form-field>
+</form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial [disabled]="form.invalid">Ok</button>
+  <button mat-button (click)="close()">Cancel</button>
+</div>

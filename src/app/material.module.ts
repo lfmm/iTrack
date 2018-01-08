@@ -11,6 +11,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { OverlayModule } from '@angular/cdk/overlay';
 import {
   MatTableModule,
+  MatSortModule,
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -26,6 +27,7 @@ import {
   MatListModule,
   MatMenuModule,
   MatNativeDateModule,
+  MatPaginatorModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
@@ -38,13 +40,13 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatPaginator,
 } from '@angular/material';
 
 @NgModule({
   exports: [
     // CDK
     CdkTableModule,
-    MatTableModule,
     OverlayModule,
 
     // Material
@@ -62,6 +64,7 @@ import {
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,
@@ -71,6 +74,8 @@ import {
     MatSlideToggleModule,
     MatSliderModule,
     MatSnackBarModule,
+    MatSortModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,

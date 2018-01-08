@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MaterialModule } from '../material.module';
 import { MoneyRoutingModule } from './money-routing.module';
 import { MoneyComponent } from './money.component';
+import { EditDialogComponent } from './edit/edit-dialog.component';
 
 // state management
 import { StoreModule } from '@ngrx/store';
@@ -14,6 +16,8 @@ import { moneyReducer } from './state/money.reducer';
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     TranslateModule,
     FlexLayoutModule,
     MaterialModule,
@@ -21,7 +25,9 @@ import { moneyReducer } from './state/money.reducer';
     StoreModule.forFeature('money', moneyReducer)
   ],
   declarations: [
-    MoneyComponent
-  ]
+    MoneyComponent,
+    EditDialogComponent
+  ],
+  entryComponents: [EditDialogComponent]
 })
 export class MoneyModule { }

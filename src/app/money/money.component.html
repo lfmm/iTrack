@@ -10,73 +10,77 @@
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
           </mat-form-field>
         </div>
-        <mat-table #moneyList [dataSource]="moneyItemsDS">
-          <!-- id column -->
-          <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-            <mat-cell *matCellDef="let e"> {{ e.id }} </mat-cell>
-          </ng-container>
-          <!-- id column -->
-          <ng-container matColumnDef="title">
-            <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-            <mat-cell *matCellDef="let e"> {{ e.title }} </mat-cell>
-          </ng-container>
-          <!-- id column -->
-          <ng-container matColumnDef="direction">
-            <mat-header-cell *matHeaderCellDef> Direction </mat-header-cell>
+        <mat-table #moneyList [dataSource]="moneyItemsDS" matSort>
+          <!-- select column -->
+          <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="moneyItemSelection.hasValue() && isAllSelected()"
+                            [indeterminate]="moneyItemSelection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+              <button mat-icon-button (click)="createMoneyItem()">
+                <mat-icon>playlist_add</mat-icon>
+              </button>
+            </mat-header-cell>
             <mat-cell *matCellDef="let e">
-              {{ e.direction }}
-              <button mat-icon-button>
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? moneyItemSelection.toggle(e) : null"
+                            [checked]="moneyItemSelection.isSelected(e)">
+              </mat-checkbox>
+              <button mat-icon-button (click)="deleteMoneyItem(e.id)">
                 <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-icon-button (click)="editMoneyItem(e)">
+                <mat-icon>edit</mat-icon>
               </button>
             </mat-cell>
           </ng-container>
           <!-- id column -->
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.id }} </mat-cell>
+          </ng-container>
+          <!-- id column -->
+          <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.title }} </mat-cell>
+          </ng-container>
+          <!-- id column -->
+          <ng-container matColumnDef="direction">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Direction </mat-header-cell>
+            <mat-cell *matCellDef="let e">
+              {{ e.direction }}
+            </mat-cell>
+          </ng-container>
+          <!-- id column -->
           <ng-container matColumnDef="amount">
-            <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Amount </mat-header-cell>
             <mat-cell *matCellDef="let e"> {{ e.amount }} </mat-cell>
           </ng-container>
           <!-- id column -->
           <ng-container matColumnDef="when">
-            <mat-header-cell *matHeaderCellDef> When </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> When </mat-header-cell>
             <mat-cell *matCellDef="let e"> {{ e.when }} </mat-cell>
           </ng-container>
           <!-- id column -->
           <ng-container matColumnDef="where">
-            <mat-header-cell *matHeaderCellDef> Where </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Where </mat-header-cell>
             <mat-cell *matCellDef="let e"> {{ e.where }} </mat-cell>
           </ng-container>
           <!-- id column -->
           <ng-container matColumnDef="who">
-            <mat-header-cell *matHeaderCellDef> Who </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Who </mat-header-cell>
             <mat-cell *matCellDef="let e"> {{ e.who }} </mat-cell>
           </ng-container>
           <!-- columns and rows -->
           <mat-header-row *matHeaderRowDef="moneyListColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: moneyListColumns;"></mat-row>
         </mat-table>
+        <mat-paginator #paginator
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10, 20, 50, 100]">
+        </mat-paginator>
       </div>
-      <div *ngFor="let t of moneyItems">
-
-        <h3>Money Item ID: {{ t.id }} </h3>
-        <p>Money Item Title and Direction and Amount: {{ t.title + ' - ' + t.direction + ' - ' + t.amount }}</p>
-        <p>Money Item When and Who: {{ t.when.toString() + ' - ' + t.who }}</p>
-      
-        
-        <button *ngIf="t.who==='mistery man'" class="button is-warning" 
-                (click)="updateMoneyItem(t.id, t, 'mistery woman')">
-          Upgrade to Something new
-        </button>
-      
-        <button *ngIf="t.who==='mistery woman'" class="button is-warning" 
-                (click)="updateMoneyItem(t.id, t, 'mistery man')">
-          Upgrade to Something new
-        </button>
-      
-        <button class="button is-danger" (click)="deleteMoneyItem(t.id)">DELETE</button>
-         <hr>
-      </div>
-      <button class="button is-primary" (click)="createMoneyItem()">CREATE new Money Item</button>
     </mat-card-content>
   </mat-card>
 </div>
