@@ -1,0 +1,107 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title translate>Your money tags</mat-card-title>
+    <mat-card-subtitle>
+      <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex>
+        <div fxFlex class="pad-8">
+          top left
+        </div>
+        <div fxFlex class="pad-8">
+          <h3 *ngIf="itemEditNew" translate>Create tag</h3>
+          <h3 *ngIf="!itemEditNew" translate>Edit tag</h3>
+
+          <mat-form-field>
+              <input matInput [placeholder]="'Code' | translate" type="text" [(ngModel)]="itemEdit.code" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [placeholder]="'Title' | translate" type="text" [(ngModel)]="itemEdit.title" required>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [placeholder]="'Color' | translate" type="text" [(ngModel)]="itemEdit.color" required>
+              <span matPrefix [style.background-color]="itemEdit.color">&nbsp;</span>
+            </mat-form-field>
+
+        </div>
+      </div>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div class="money-list-container mat-elevation-z8">
+        <div class="filter-container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex>
+          <div fxFlex>
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" [placeholder]="'Filter by details...' | translate">
+            </mat-form-field>
+          </div>
+        </div>
+        <mat-table #table [dataSource]="tableItemsDS" matSort>
+          <!-- select column -->
+          <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="tableItemSelection.hasValue() && isAllSelected()"
+                            [indeterminate]="tableItemSelection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+              <button mat-icon-button (click)="createTableItem()">
+                <mat-icon>playlist_add</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteSelectedTableItems()">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let e">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? tableItemSelection.toggle(e) : null"
+                            [checked]="tableItemSelection.isSelected(e)">
+              </mat-checkbox>
+              <button mat-icon-button (click)="editTableItem(e)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteTableItem(e.code)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+          <!-- code column -->
+          <ng-container matColumnDef="code">
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate>Code</mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.code }} </mat-cell>
+          </ng-container>
+          <!-- title column -->
+          <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate>Title</mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.title }} </mat-cell>
+          </ng-container>
+          <!-- color column -->
+          <ng-container matColumnDef="color">
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate>Color</mat-header-cell>
+            <mat-cell *matCellDef="let e" [style.background-color]="e.color"> {{ e.color }} </mat-cell>
+          </ng-container>
+          <!-- description column -->
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate>Description</mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.description }} </mat-cell>
+          </ng-container>
+          <!-- when column -->
+          <ng-container matColumnDef="when">
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate>When</mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.when | date:'yyyy-MM-dd' }} </mat-cell>
+          </ng-container>
+          <!-- who column -->
+          <ng-container matColumnDef="who">
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate>Who</mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.who }} </mat-cell>
+          </ng-container>
+          <!-- columns and rows -->
+          <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10, 20, 50, 100]">
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+  

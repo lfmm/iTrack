@@ -23,6 +23,10 @@
       <i class="fa fa-list"></i>
       <span translate>Money</span>
     </button>
+    <button mat-button routerLink="/money-tag" routerLinkActive="active">
+      <i class="fa fa-tag"></i>
+      <span translate>Money Tag (edit)</span>
+    </button>
   </div>
   <span fxFlex></span>
   <span class="vertical-line"></span>
@@ -62,7 +66,10 @@
       <button mat-menu-item (click)="setTheme('app-dark-theme')">
         Dark Theme
       </button>
-    </mat-menu>
+      <button mat-menu-item (click)="setTheme('app-color-theme')">
+        Color Theme
+      </button>
+      </mat-menu>
     <mat-divider></mat-divider>
     <button mat-menu-item (click)="logout()" translate>Logout</button>
   </mat-menu>

@@ -24,9 +24,25 @@
     <mat-datepicker #picker1></mat-datepicker>
     <mat-error *ngIf="form.get('when').invalid">{{ getErrorMessage('when') }}</mat-error>
   </mat-form-field>
+  <div>
+    La. / Lo.: {{ data.where?.latitude }} / {{ data.where?.longitude }}
+  </div>
   <mat-form-field>
     <input matInput class="form-control" formControlName="who" [placeholder]="'Who' | translate" type="text" [(ngModel)]="data.who" required>
     <mat-error *ngIf="form.get('who').invalid">{{ getErrorMessage('who') }}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-chip-list #tagList>
+      <mat-chip *ngFor="let t of data.tags" [selectable]="true" [removable]="true" (remove)="removeTag(t)" [style.background-color]="t.color">
+        {{t.code}}
+        <mat-icon matChipRemove translate>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Add tag..."
+              [matChipInputFor]="tagList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addTag($event)" />
+    </mat-chip-list>
   </mat-form-field>
 </form>
 </div>

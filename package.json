@@ -48,6 +48,7 @@
     "cordova-custom-config": "^4.0.2",
     "cordova-ios": "^4.5.3",
     "cordova-plugin-device": "^1.1.7",
+    "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-splashscreen": "^4.1.0",
     "cordova-plugin-statusbar": "^2.4.1",
@@ -57,12 +58,13 @@
     "ionic-plugin-keyboard": "^2.2.1",
     "lodash": "^4.17.4",
     "material-design-icons": "^3.0.1",
+    "ngrx-store-localstorage": "^0.3.0",
     "rxjs": "5.5.2",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
     "cordova": "^8.0.0",
-    "npm": "^3",
+    "npm": "^5.6.0",
     "@angular/cli": "~1.5.0",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.0.0",
@@ -106,7 +108,8 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-whitelist": {},
       "ionic-plugin-keyboard": {},
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-geolocation": {}
     }
   }
 }

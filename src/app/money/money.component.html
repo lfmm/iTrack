@@ -2,25 +2,91 @@
   <mat-card>
     <mat-card-title translate>Your money</mat-card-title>
     <mat-card-subtitle>
-      <div fxFlex>
-        <h3>In</h3>
-        <ng-container *ngIf="moneyInStat">
-          {{ moneyInStat.itemCount }} / {{ moneyInStat.totalAmount }}
-        </ng-container>
-      </div>
-      <div fxFlex>
-        <h3>Out</h3>
-        <ng-container *ngIf="moneyOutStat">
-          {{ moneyOutStat.itemCount }} / {{ moneyOutStat.totalAmount }}
-        </ng-container>
+      <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex>
+        <div fxFlex class="pad-8">
+          <ng-container *ngIf="moneyInStat">
+            <mat-card>
+              <mat-card-header>
+                <div mat-card-avatar>
+                  <mat-icon style="color: green;">arrow_upward</mat-icon>
+                </div>
+                <mat-card-title translate>In</mat-card-title>
+                <mat-card-subtitle translate>Display the <strong>In</strong> (money) stats.</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-list dense>
+                  <mat-list-item>
+                    <span matLine>Items (N): <strong>{{ moneyInStat.itemCount }}</strong> items</span>
+                    <span matLine>Total amount (€): € <strong>{{ moneyInStat.totalAmount }}</strong></span>
+                    <span matLine>From (Date): <strong>{{ moneyInStat.from | date:'yyyy-MM-dd' }}</strong></span>
+                    <span matLine>To (Date): <strong>{{ moneyInStat.to | date:'yyyy-MM-dd'  }}</strong></span>
+                    <span matLine>Who(s) (User): <strong>{{ moneyInStat.whosConcat() }}</strong></span>
+                  </mat-list-item>
+                </mat-list>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
+        </div>
+        <div fxFlex class="pad-8">
+          <ng-container *ngIf="moneyOutStat">
+            <mat-card>
+              <mat-card-header>
+                <div mat-card-avatar>
+                  <mat-icon style="color: red;">arrow_downward</mat-icon>
+                </div>
+                <mat-card-title translate>Out</mat-card-title>
+                <mat-card-subtitle translate>Display the <strong>Out</strong> (money) stats.</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-list dense>
+                  <mat-list-item>
+                    <span matLine>Items (N): <strong>{{ moneyOutStat.itemCount }}</strong> items</span>
+                    <span matLine>Total amount (€): € <strong>{{ moneyOutStat.totalAmount }}</strong></span>
+                    <span matLine>From (Date): <strong>{{ moneyOutStat.from | date:'yyyy-MM-dd' }}</strong></span>
+                    <span matLine>To (Date): <strong>{{ moneyOutStat.to | date:'yyyy-MM-dd' }}</strong></span>
+                    <span matLine>Who(s) (User): <strong>{{ moneyOutStat.whosConcat() }}</strong></span>
+                  </mat-list-item>
+                </mat-list>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
+        </div>
       </div>
     </mat-card-subtitle>
     <mat-card-content>
       <div class="money-list-container mat-elevation-z8">
-        <div class="filter-container">
-          <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-          </mat-form-field>
+        <div class="filter-container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex
+          [ngStyle.xs]="{ 'min-height.px': 128 }"
+          [ngStyle.sm]="{ 'min-height.px': 128 }">
+          <div fxFlex>
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" [placeholder]="'Filter by details...' | translate">
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field>
+              <mat-chip-list #tagList>
+                <mat-chip *ngFor="let t of moneyTagsFilter" [selectable]="true" [removable]="true" (remove)="removeTag(t)" [style.background-color]="t.color">
+                  {{t.code}}
+                  <mat-icon matChipRemove translate>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="Filter by tag(s)..."
+                        [matChipInputFor]="tagList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="true"
+                        (matChipInputTokenEnd)="addTag($event)" />
+              </mat-chip-list>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field>
+              <mat-select (selectionChange)="applyDirectionFilter($event.value)" [placeholder]="'Filter by direction' | translate">
+                <mat-option>None</mat-option>
+                <mat-option value="0">In</mat-option>
+                <mat-option value="1">Out</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
         <mat-table #moneyList [dataSource]="moneyItemsDS" matSort>
           <!-- select column -->
@@ -33,56 +99,63 @@
               <button mat-icon-button (click)="createMoneyItem()">
                 <mat-icon>playlist_add</mat-icon>
               </button>
+              <button mat-icon-button (click)="deleteSelectedMoneyItems()">
+                <mat-icon>delete</mat-icon>
+              </button>
             </mat-header-cell>
             <mat-cell *matCellDef="let e">
               <mat-checkbox (click)="$event.stopPropagation()"
                             (change)="$event ? moneyItemSelection.toggle(e) : null"
                             [checked]="moneyItemSelection.isSelected(e)">
               </mat-checkbox>
-              <button mat-icon-button (click)="deleteMoneyItem(e.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
               <button mat-icon-button (click)="editMoneyItem(e)">
                 <mat-icon>edit</mat-icon>
               </button>
+              <button mat-icon-button (click)="deleteMoneyItem(e.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
             </mat-cell>
           </ng-container>
-          <!-- id column -->
-          <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
-            <mat-cell *matCellDef="let e"> {{ e.id }} </mat-cell>
+          <!-- tags column -->
+          <ng-container matColumnDef="tags">
+            <mat-header-cell *matHeaderCellDef translate>Tags</mat-header-cell>
+            <mat-cell *matCellDef="let e">
+              <mat-chip-list>
+                <mat-chip *ngFor="let t of e.tags" [style.background-color]="t.color">{{ t.code }}</mat-chip>
+              </mat-chip-list>
+            </mat-cell>
           </ng-container>
-          <!-- id column -->
+          <!-- title column -->
           <ng-container matColumnDef="title">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate>Title</mat-header-cell>
             <mat-cell *matCellDef="let e"> {{ e.title }} </mat-cell>
           </ng-container>
-          <!-- id column -->
+          <!-- direction column -->
           <ng-container matColumnDef="direction">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Direction </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate> Direction </mat-header-cell>
             <mat-cell *matCellDef="let e">
               <mat-icon *ngIf="e.direction === 0" style="color: green;">arrow_upward</mat-icon>
               <mat-icon *ngIf="e.direction === 1" style="color: red;">arrow_downward</mat-icon>
             </mat-cell>
           </ng-container>
-          <!-- id column -->
+          <!-- amount column -->
           <ng-container matColumnDef="amount">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Amount </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate> Amount </mat-header-cell>
             <mat-cell *matCellDef="let e"> {{ e.amount }} </mat-cell>
           </ng-container>
-          <!-- id column -->
+          <!-- when column -->
           <ng-container matColumnDef="when">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> When </mat-header-cell>
-            <mat-cell *matCellDef="let e"> {{ e.when }} </mat-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate> When </mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.when | date:'yyyy-MM-dd' }} </mat-cell>
           </ng-container>
-          <!-- id column -->
+          <!-- where column -->
           <ng-container matColumnDef="where">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Where </mat-header-cell>
-            <mat-cell *matCellDef="let e"> {{ e.where }} </mat-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate> Where </mat-header-cell>
+            <mat-cell *matCellDef="let e"> {{ e.where?.latitude }} / {{ e.where?.longitude }} </mat-cell>
           </ng-container>
-          <!-- id column -->
+          <!-- who column -->
           <ng-container matColumnDef="who">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Who </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header translate> Who </mat-header-cell>
             <mat-cell *matCellDef="let e"> {{ e.who }} </mat-cell>
           </ng-container>
           <!-- columns and rows -->

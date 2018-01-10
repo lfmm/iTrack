@@ -33,7 +33,7 @@ export function createHttpService(backend: ConnectionBackend,
     FlexLayoutModule,
     MaterialModule,
     RouterModule,
-    StoreModule.forFeature('theme', themeReducer)
+    // StoreModule.forFeature('theme', themeReducer)
   ],
   declarations: [
     HeaderComponent,

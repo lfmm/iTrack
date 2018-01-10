@@ -24,6 +24,15 @@ export function moneyReducer(
             }, state);
         case actions.DELETE:
             return moneyAdapter.removeOne(action.id, state);
+        case actions.REFRESH:
+            return Object.assign({}, state);
+        case actions.DELETE_MANY:
+            return moneyAdapter.removeMany(action.ids, state);
+        case actions.LET_TAGS:
+          return moneyAdapter.updateOne({
+              id: action.id,
+              changes: { tags: action.tags ? [...action.tags] : [] },
+            }, state);
         default:
             return state;
         }
