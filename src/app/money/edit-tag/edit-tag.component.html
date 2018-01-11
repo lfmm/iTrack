@@ -3,25 +3,44 @@
     <mat-card-title translate>Your money tags</mat-card-title>
     <mat-card-subtitle>
       <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex>
-        <div fxFlex class="pad-8">
+        <div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" class="pad-8">
           top left
         </div>
-        <div fxFlex class="pad-8">
-          <h3 *ngIf="itemEditNew" translate>Create tag</h3>
-          <h3 *ngIf="!itemEditNew" translate>Edit tag</h3>
-
-          <mat-form-field>
-              <input matInput [placeholder]="'Code' | translate" type="text" [(ngModel)]="itemEdit.code" required>
+        <div fxFlex="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="pad-8">
+          <ng-container *ngIf="itemEdit">
+            <h3 *ngIf="itemEditNew" translate>Create tag</h3>
+            <h3 *ngIf="!itemEditNew" translate>Edit tag</h3>
+            <!-- code -->
+            <mat-form-field>
+              <input matInput [placeholder]="'Code' | translate" type="text" [(ngModel)]="itemEdit.code" required
+                [disabled]="!itemEditNew">
             </mat-form-field>
+            <!-- title -->
             <mat-form-field>
               <input matInput [placeholder]="'Title' | translate" type="text" [(ngModel)]="itemEdit.title" required>
             </mat-form-field>
-
+            <!-- color -->
             <mat-form-field>
               <input matInput [placeholder]="'Color' | translate" type="text" [(ngModel)]="itemEdit.color" required>
               <span matPrefix [style.background-color]="itemEdit.color">&nbsp;</span>
             </mat-form-field>
-
+            <!-- description -->
+            <mat-form-field>
+              <textarea matInput [placeholder]="'Description' | translate" type="text" [(ngModel)]="itemEdit.description"></textarea>
+            </mat-form-field>
+            <!-- when -->
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker1" [placeholder]="'When' | translate" [(ngModel)]="itemEdit.when">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <!-- who -->
+            <mat-form-field>
+              <input matInput [placeholder]="'Who' | translate" type="text" [(ngModel)]="itemEdit.who" required>
+            </mat-form-field>
+            <!-- Save -->
+            <button mat-button translate (click)="saveCurrentItem()" class="full-width">Save</button>
+          </ng-container>
         </div>
       </div>
     </mat-card-subtitle>

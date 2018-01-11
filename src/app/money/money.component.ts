@@ -55,6 +55,24 @@ export class MoneyComponent implements OnInit, OnDestroy {
   // Enter, comma
   separatorKeysCodes = [ENTER, COMMA];
 
+  // chart options
+  // options
+  moneyChart: any = {
+    showXAxis: true,
+    showYAxis: true,
+    gradient: false,
+    showLegend: true,
+    showXAxisLabel: true,
+    xAxisLabel: 'When',
+    showYAxisLabel: true,
+    yAxisLabel: 'Amount',
+    colorScheme: {
+      domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    },
+    autoScale: true,
+    items: []
+  };
+
   constructor(private store: Store<fromMoney.State>, private dialog: MatDialog,
     private storeTag: Store<fromMoneyTag.State>) { }
 
@@ -65,6 +83,8 @@ export class MoneyComponent implements OnInit, OnDestroy {
       this.moneyItemsDS.sort = this.moneySort;
       this.moneyItemsDS.paginator = this.moneyPaginator;
       this.moneyItemsDS.filterPredicate = this.filterMoneyItem;
+      // rebuild chart items
+      this.rebuildChartItems();
     });
     this.moneyInStatSubscription = this.store.select(fromMoney.selectInEntitiesStat)
       .subscribe((i: fromMoneyModels.MoneyStat) => {
@@ -87,10 +107,42 @@ export class MoneyComponent implements OnInit, OnDestroy {
     if (this.moneyTagsSubscription) { this.moneyTagsSubscription.unsubscribe(); }
   }
 
+  rebuildChartItems() {
+    this.moneyChart.items = [
+      {
+        'name': 'In',
+        'series': [
+          { 'name': '2018-01-08', 'value': 45 },
+          { 'name': '2018-01-09', 'value': 0 },
+          { 'name': '2018-01-10', 'value': 75 },
+          { 'name': '2018-01-11', 'value': 50 },
+        ]
+      },
+      {
+        'name': 'Out',
+        'series': [
+          { 'name': '2018-01-08', 'value': 10 },
+          { 'name': '2018-01-09', 'value': 15 },
+          { 'name': '2018-01-10', 'value': 45 },
+          { 'name': '2018-01-11', 'value': 89 },
+        ]
+      },
+      {
+        'name': 'Balance',
+        'series': [
+          { 'name': '2018-01-08', 'value': 35 },
+          { 'name': '2018-01-09', 'value': 20 },
+          { 'name': '2018-01-10', 'value': 50 },
+          { 'name': '2018-01-11', 'value': 11 },
+        ]
+      },
+    ];
+  }
+
   filterMoneyItem(data: fromMoneyModels.MoneyItem, filter: string): boolean {
     if (data) {
       let directionGo: boolean = <boolean>true;
-      if (this.moneyDirectionFilter !== null) {
+      if (this.moneyDirectionFilter !== null && this.moneyDirectionFilter !== undefined) {
         if (data.direction !== this.moneyDirectionFilter) { directionGo = false; }
       }
       if (directionGo && (this.moneyFilter || this.moneyTagFilter)) {
@@ -261,6 +313,10 @@ export class MoneyComponent implements OnInit, OnDestroy {
       this.moneyTagsFilter.splice(index, 1);
       this.applyFilter(null, 'tag');
     }
+  }
+
+  onMoneyChartSelect($e: any) {
+    console.log($e);
   }
 
 }

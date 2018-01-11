@@ -90,6 +90,15 @@ export class EditTagComponent implements OnInit, OnDestroy {
     this.store.dispatch( new fromMoneyTagActions.SelectTag(item.code) );
   }
 
+  saveCurrentItem() {
+    if (this.itemEditNew) {
+      this.store.dispatch( new fromMoneyTagActions.Create(this.itemEdit) );
+      this.store.dispatch( new fromMoneyTagActions.SelectTag(this.itemEdit.code) );
+    } else {
+      this.store.dispatch( new fromMoneyTagActions.Update(this.itemEdit.code, this.itemEdit) );
+    }
+  }
+
   applyFilter(what: string) {
     this.tableItemsDS.filter = what;
   }

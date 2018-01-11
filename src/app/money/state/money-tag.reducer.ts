@@ -21,6 +21,7 @@ export function moneyTagReducer(
     switch (action.type) {
         case actions.CREATE:
         // pass the tag code for id
+            action.moneyTag.id = action.moneyTag.code;
             return moneyTagAdapter.addOne(action.moneyTag, state);
         case actions.UPDATE:
             return moneyTagAdapter.updateOne({

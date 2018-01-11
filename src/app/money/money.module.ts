@@ -10,6 +10,9 @@ import { MoneyComponent } from './money.component';
 import { EditDialogComponent } from './edit/edit-dialog.component';
 import { EditTagComponent } from './edit-tag/edit-tag.component';
 
+// charts
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 // state management
 import { StoreModule } from '@ngrx/store';
 import { moneyReducer } from './state/money.reducer';
@@ -25,7 +28,8 @@ import { moneyTagReducer } from './state/money-tag.reducer';
     MaterialModule,
     MoneyRoutingModule,
     StoreModule.forFeature('money', moneyReducer),
-    StoreModule.forFeature('money-tag', moneyTagReducer)
+    StoreModule.forFeature('money-tag', moneyTagReducer),
+    NgxChartsModule
   ],
   declarations: [
     MoneyComponent,

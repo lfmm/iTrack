@@ -51,13 +51,30 @@
             </mat-card>
           </ng-container>
         </div>
+        <div fxFlex class="pad-8">
+          <ngx-charts-line-chart
+            [animations]="moneyChart.animations"
+            [scheme]="moneyChart.colorScheme"
+            [results]="moneyChart.items"
+            [gradient]="moneyChart.gradient"
+            [xAxis]="moneyChart.showXAxis"
+            [yAxis]="moneyChart.showYAxis"
+            [legend]="moneyChart.showLegend"
+            [showXAxisLabel]="moneyChart.showXAxisLabel"
+            [showYAxisLabel]="moneyChart.showYAxisLabel"
+            [xAxisLabel]="moneyChart.xAxisLabel"
+            [yAxisLabel]="moneyChart.yAxisLabel"
+            [autoScale]="moneyChart.autoScale"
+            (select)="onMoneyChartSelect($event)">
+          </ngx-charts-line-chart>
+        </div>
       </div>
     </mat-card-subtitle>
     <mat-card-content>
       <div class="money-list-container mat-elevation-z8">
         <div class="filter-container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxFlex
-          [ngStyle.xs]="{ 'min-height.px': 128 }"
-          [ngStyle.sm]="{ 'min-height.px': 128 }">
+          [ngStyle.xs]="{ 'min-height.px': 168 }"
+          [ngStyle.sm]="{ 'min-height.px': 168 }">
           <div fxFlex>
             <mat-form-field>
               <input matInput (keyup)="applyFilter($event.target.value)" [placeholder]="'Filter by details...' | translate">
